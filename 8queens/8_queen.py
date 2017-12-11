@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import division, print_function
 import random
 
 def queenss(n,p,arr):
@@ -16,13 +17,10 @@ def isSafe(queen, queens, p):
 def inCheck(q1, q2,p):
     
     if q1[0] == q2[0]: # 同列
-        # if abs(q1[1] - q2[1])<=p:
         return True
     if q1[1] == q2[1]: # 同行
-        # if abs(q1[0] - q2[0])<=p:
         return True
     if abs(q1[0] - q2[0]) == abs(q1[1] - q2[1]): # 對角線
-        # if abs(q1[0] - q2[0])<=p and abs(q1[1] - q2[1])<=p:
         return True
     return False
 

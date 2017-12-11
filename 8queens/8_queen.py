@@ -45,18 +45,20 @@ p = int(input("Input fire range (default is -1 ): "))
 if p == -1:
     p = number
 
-put_queen = input("Input queen's position (input -1 to end ): ")
+put_queen = 0
 set_queen = []
-while put_queen !='-1':
+while 1:
+    put_queen = input("Input queen's position (input -1 to end ): ")
     tmp = put_queen.split(' ')
-    if int(tmp[0])<=number and int(tmp[1])<=number:
+    if int(tmp[0])==-1:
+        break
+    if int(tmp[0])<=number and int(tmp[1])<=number and int(tmp[0])>0 and int(tmp[1])>0:
         set_queen.append((int(tmp[0]),int(tmp[1])))
     else:
-        print("wrong position")
-        break
-    put_queen = input("Input queen's position (input -1 to end ): ")
-    pass
-print('find solution...')
+        print("Wrong position.")
+        continue
+
+print('Find solution...')
 
 all_map = queenss(number,p,[[]])
 
@@ -81,29 +83,31 @@ for x in all_map:
 # for x in fil_map:
 #     print(x)
 # print()
-rand_map = random.randint(0,len(fil_map)-1)
-queenNum = number
-for x in range(1,number+1):
-    for y in range(1,number+1):
-        if (x,y) not in fil_map[rand_map]:
-            # print('haha')
-            tmp = (x,y)
-            if isSafe2(tmp,fil_map[rand_map],p):
-                fil_map[rand_map].append(tmp)
-                queenNum+=1
+if len(fil_map)>0:
+    rand_map = random.randint(0,len(fil_map)-1)
+    queenNum = number
+    for x in range(1,number+1):
+        for y in range(1,number+1):
+            if (x,y) not in fil_map[rand_map]:
+                # print('haha')
+                tmp = (x,y)
+                if isSafe2(tmp,fil_map[rand_map],p):
+                    fil_map[rand_map].append(tmp)
+                    queenNum+=1
 
-print()
-print(fil_map[rand_map])
-print('queens\' number: ',queenNum,'\n')
-for x in range(1,number+1):
-    for y in range(1,number+1):
-        a = (x,y)
-        if a in fil_map[rand_map]:
-            print('Q',end=" ")
-        else:
-            print('.', end=" ")
     print()
-# print('\nsolutions: ',len(fil_map))
-
+    print(fil_map[rand_map])
+    print('Queens\' number: ',queenNum,'\n')
+    for x in range(1,number+1):
+        for y in range(1,number+1):
+            a = (x,y)
+            if a in fil_map[rand_map]:
+                print('Q',end=" ")
+            else:
+                print('.', end=" ")
+        print()
+    # print('\nsolutions: ',len(fil_map))
+else:
+    print('No solution.')
 
 

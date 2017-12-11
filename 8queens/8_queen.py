@@ -1,19 +1,35 @@
 # -*- coding: utf-8 -*-
 import random
 
-def queenss(n,p):
-    def placeQueens(k):
-        return [[]] if k == 0 \
-                    else [[(k, column)] + queens 
-                             for queens in placeQueens(k - 1)
-                                 for column in range(1, n + 1) 
-                                     if isSafe((k, column), queens,p)]
-    return placeQueens(n)
+def queenss(n,p,arr):
+    def placeQueens(k,rp,arr):
+        if k==0:
+            return [[]]
+        else:
+            return [[(k, column)] + queens for queens in placeQueens(k - 1,rp,arr) for column in range(1, n + 1) if isSafe((k, column), queens,p)]
+    
+    return placeQueens(n, p,arr)
 
 def isSafe(queen, queens, p):
     return all(not inCheck(queen, q, p) for q in queens)
 
 def inCheck(q1, q2,p):
+    
+    if q1[0] == q2[0]: # 同列
+        # if abs(q1[1] - q2[1])<=p:
+        return True
+    if q1[1] == q2[1]: # 同行
+        # if abs(q1[0] - q2[0])<=p:
+        return True
+    if abs(q1[0] - q2[0]) == abs(q1[1] - q2[1]): # 對角線
+        # if abs(q1[0] - q2[0])<=p and abs(q1[1] - q2[1])<=p:
+        return True
+    return False
+
+def isSafe2(queen, queens, p):
+    return all(not inCheck2(queen, q, p) for q in queens)
+
+def inCheck2(q1, q2,p):
     
     if q1[0] == q2[0]: # 同列
         if abs(q1[1] - q2[1])<=p:
@@ -43,7 +59,9 @@ while put_queen !='-1':
     put_queen = input("Input queen's position (input -1 to end ): ")
     pass
 print('find solution...')
-all_map = queenss(number,p)
+
+all_map = queenss(number,p,[[]])
+
 fil_map = []
 for x in all_map:
     tmp = 1
@@ -62,11 +80,23 @@ for x in all_map:
 #         print(q, end="")
 #     print()
 
-for x in fil_map:
-    print(x)
-print()
+# for x in fil_map:
+#     print(x)
+# print()
 rand_map = random.randint(0,len(fil_map)-1)
-# print(rand_map)
+queenNum = number
+for x in range(1,number+1):
+    for y in range(1,number+1):
+        if (x,y) not in fil_map[rand_map]:
+            # print('haha')
+            tmp = (x,y)
+            if isSafe2(tmp,fil_map[rand_map],p):
+                fil_map[rand_map].append(tmp)
+                queenNum+=1
+
+print()
+print(fil_map[rand_map])
+print('queens\' number: ',queenNum,'\n')
 for x in range(1,number+1):
     for y in range(1,number+1):
         a = (x,y)
@@ -75,7 +105,7 @@ for x in range(1,number+1):
         else:
             print('.', end=" ")
     print()
-print('\nsolutions: ',len(fil_map))
+# print('\nsolutions: ',len(fil_map))
 
 
 

@@ -108,6 +108,29 @@ if len(fil_map)>0:
         print()
     # print('\nsolutions: ',len(fil_map))
 else:
-    print('No solution.')
+    if number<4 and (p==0 or number-p>1):
+        queenNum=0
+        fil_map = []
+        for x in range(1,number+1):
+            for y in range(1,number+1):
+                if (x,y) not in fil_map:
+                    # print('haha')
+                    tmp = (x,y)
+                    if isSafe2(tmp,fil_map,p):
+                        fil_map.append(tmp)
+                        queenNum+=1
+        print()
+        print('Queens\' number: ',queenNum,'\n')
+        for x in range(1,number+1):
+            for y in range(1,number+1):
+                a = (x,y)
+                if a in fil_map:
+                    print('Q',end=" ")
+                else:
+                    print('.', end=" ")
+            print()
+    else:
+        print('No solution.')
+
 
 

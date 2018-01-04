@@ -48,7 +48,7 @@ if p == -1:
 put_queen = 0
 set_queen = []
 while 1:
-    put_queen = input("Input queen's position (input -1 to end ): ")
+    put_queen = str(input("Input queen's position (input -1 to end ): "))
     tmp = put_queen.split(' ')
     if int(tmp[0])==-1:
         break
@@ -71,6 +71,7 @@ for x in all_map:
             break
     if tmp==1:
         fil_map.append(x)
+        print(x)
 
 # print(fil_map)
 

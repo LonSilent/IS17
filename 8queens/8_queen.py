@@ -71,7 +71,7 @@ for x in all_map:
             break
     if tmp==1:
         fil_map.append(x)
-        print(x)
+        # print(x)
 
 # print(fil_map)
 
@@ -85,17 +85,21 @@ for x in all_map:
 #     print(x)
 # print()
 if len(fil_map)>0:
+    
+    for s in range(len(fil_map)):
+        queenNum = number  
+        for x in range(1,number+1):
+            for y in range(1,number+1):
+                if (x,y) not in fil_map[s]:
+                    # print('haha')
+                    tmp = (x,y)
+                    if isSafe2(tmp,fil_map[s],p):
+                        fil_map[s].append(tmp)
+                        queenNum+=1
+        print(fil_map[s])
+    fil_map = [x for x in fil_map if len(x) == len(max(fil_map,key=len))]
     rand_map = random.randint(0,len(fil_map)-1)
-    queenNum = number
-    for x in range(1,number+1):
-        for y in range(1,number+1):
-            if (x,y) not in fil_map[rand_map]:
-                # print('haha')
-                tmp = (x,y)
-                if isSafe2(tmp,fil_map[rand_map],p):
-                    fil_map[rand_map].append(tmp)
-                    queenNum+=1
-
+    queenNum = len(fil_map[rand_map])
     print()
     print(fil_map[rand_map])
     print('Queens\' number: ',queenNum,'\n')

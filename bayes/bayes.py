@@ -9,33 +9,39 @@ SAMPLES_COUNT = 1000000
 ERR = 0.005
 
 def minimal(iterable, func):
-    lowest_values = []
-    it = iter(iterable)
-    try:
-        x = next(it)
-    except StopIteration:
-        return []
-    lowest_values = [x]
-    lowest_weight = func(x)
-    for x in it:
-        weight = func(x)
-        if weight == lowest_weight:
-            lowest_values.append(x)
-        elif weight < lowest_weight:
-            lowest_values = []
-            lowest_weight = weight
-    if len(lowest_values) == 0 and len(iterable) != 0:
-        sort_value = set(sorted(iterable, key=len)[0])
-        # print(sort_value)
-        iterable_set = [set(i) for i in iterable]
-        # print(iterable_set)
-        if all(sort_value.issubset(i) for i in iterable_set):
-            lowest_values.append(sort_value)
-    if len(lowest_values) == 0 and len(iterable) > 1:
-        sort_value = set(sorted(iterable, key=len)[0])
-        lowest_values.append(sort_value)
+    iterable = [set(x) for x in iterable]
+    intersect = iterable[0]
 
-    return lowest_values
+    for i in range(0, len(iterable)-1):
+        intersect = intersect.intersection(iterable[i+1])
+
+    return intersect
+
+    # lowest_values = []
+    # it = iter(iterable)
+    # try:
+    #     x = next(it)
+    # except StopIteration:
+    #     return []
+    # lowest_values = [x]
+    # lowest_weight = func(x)
+    # for x in it:
+    #     weight = func(x)
+    #     if weight == lowest_weight:
+    #         lowest_values.append(x)
+    #     elif weight < lowest_weight:
+    #         lowest_values = []
+    #         lowest_weight = weight
+    # if len(lowest_values) == 0 and len(iterable) != 0:
+    #     sort_value = set(sorted(iterable, key=len)[0])
+    #     iterable_set = [set(i) for i in iterable]
+    #     if all(sort_value.issubset(i) for i in iterable_set):
+    #         lowest_values.append(sort_value)
+    # if len(lowest_values) == 0 and len(iterable) > 1:
+    #     sort_value = set(sorted(iterable, key=len)[0])
+    #     lowest_values.append(sort_value)
+
+    return intersect
 
 def tokey(t):
     t = sorted(t)
@@ -95,17 +101,17 @@ def construct_bayes_network(node_order, prob_table):
         node_p = prob_table[node]
         # print(tokey([x for x in queue if x != node]))
         all_cond_p = all_p / prob_table[tokey([x for x in queue if x != node])]
+        print("all_node:", queue, "all_p:", all_p)
+        print("node:", node, "node_p:", node_p)
+        print("all_cond_p = given:", [x for x in queue if x != node], "target:", [node], all_cond_p)
 
         if len(queue) == 2:
-            if check_same_p(all_p, all_cond_p):
+            if not check_same_p(all_p, all_cond_p):
                 edgelist.append((queue[0], node))
                 print("edgelist:", edgelist)
             print("==========================")
             continue
 
-        print("all_node:", queue, "all_p:", all_p)
-        print("node:", node, "node_p:", node_p)
-        print("all_cond_p = given:", [x for x in queue if x != node], "target:", [node], all_cond_p)
         for s in subset:
             s = list(s)
             cp = cond_p(prob_table, s, [node])
@@ -136,17 +142,26 @@ def construct_bayes_network(node_order, prob_table):
     return edgelist
 
 if __name__ == '__main__':
-    node_number = 1
+    node_number = 4
     prob = {}
     samples = []
-    data_path = 'data/samples.2017nov071410.txt'
 
     if node_number == 1:
+        data_path = 'data/samples.2017nov071410.txt'
         edgelist_path = 'result/edgelist_order1.txt'
         node_order = ['0', '1', '2', '3', '4', '5', '6']
     elif node_number == 2:
+        data_path = 'data/samples.2017nov071410.txt'
         edgelist_path = 'result/edgelist_order2.txt'
         node_order = ['1', '4', '6', '0', '5', '3', '2']
+    elif node_number == 3:
+        data_path = 'data/samples.2017nov071410.txt'
+        edgelist_path = 'result/edgelist_order3.txt'
+        node_order = ['3', '2', '1', '0', '5', '4', '6']
+    elif node_number == 4:
+        data_path = 'data/is2017.testset1.txt'
+        edgelist_path = 'result/edgelist_order4.txt'
+        node_order = ['3', '2', '1', '0']
 
     with open(data_path) as f:
         column = f.readline().strip().split(',')

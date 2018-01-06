@@ -10,6 +10,10 @@ ERR = 0.005
 
 def minimal(iterable, func):
     iterable = [set(x) for x in iterable]
+
+    if len(iterable) == 1:
+        return iterable[0]
+
     intersect = iterable[0]
 
     for i in range(0, len(iterable)-1):
@@ -41,7 +45,7 @@ def minimal(iterable, func):
     #     sort_value = set(sorted(iterable, key=len)[0])
     #     lowest_values.append(sort_value)
 
-    return intersect
+    # return lowest_values
 
 def tokey(t):
     t = sorted(t)
@@ -123,8 +127,8 @@ def construct_bayes_network(node_order, prob_table):
         self_nodes = ''.join([str(x) for x in sorted(queue) if x != node])
         print("self_nodes:", self_nodes)
         if len(candidates) > 0:
-            if self_nodes in candidates:
-                candidates.remove(self_nodes)
+            # if self_nodes in candidates:
+            #     candidates.remove(self_nodes)
             pair = minimal(set(candidates), len)
             print("minimal set:", pair)
             if len(pair) > 0:
@@ -142,7 +146,7 @@ def construct_bayes_network(node_order, prob_table):
     return edgelist
 
 if __name__ == '__main__':
-    node_number = 4
+    node_number = 5
     prob = {}
     samples = []
 
@@ -162,6 +166,10 @@ if __name__ == '__main__':
         data_path = 'data/is2017.testset1.txt'
         edgelist_path = 'result/edgelist_order4.txt'
         node_order = ['3', '2', '1', '0']
+    elif node_number == 5:
+        data_path = 'data/samples.txt'
+        edgelist_path = 'result/edgelist_order5.txt'
+        node_order = ['0', '1', '2', '3', '4', '5', '6']
 
     with open(data_path) as f:
         column = f.readline().strip().split(',')
